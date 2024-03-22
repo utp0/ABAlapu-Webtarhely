@@ -1,0 +1,2 @@
+DROP TABLE Fajlok;
+CREATE TABLE Fajlok(id NUMBER(16), nev VARCHAR2(255), mappa NUMBER(16), meret NUMBER(16), path VARCHAR2(255));
