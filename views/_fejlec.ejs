@@ -1,0 +1,35 @@
+<div class='fejlec flexcon'>
+	<div class='flex'>
+		<a class='ftitle' href='/'>Webtárhely - Főoldal</a>
+	</div>
+<% if(session.nev) { %>
+	<div class='flex'>
+		Üdvözlünk, <%= session.nev %>!
+	</div>
+	<div class='fbutton'>
+		<a href='TODO'>Fiók beállítások</a>
+	</div>
+	<div class='fbutton'>
+		<a href='/logout'>Kijelentkezés</a>
+	</div>
+<% } else { %>
+	<div class='fbutton'>
+		<a href='/login'>Bejelentkezés</a>
+	</div>
+	<div class='fbutton'>
+		<a href='/register'>Regisztráció</a>
+	</div>
+<% } %>
+</div>
+<% if(session.nev) { %>
+<div class='fejlec2 flexcon'>
+	<div class='flex'>
+		Tárhely: 0B / 100GiB
+	</div>
+</div>
+<% } %>
+<% if(typeof status !== 'undefined') { %>
+<div class='adminbar yellow'>
+	<%= status %>
+</div>
+<% } %>

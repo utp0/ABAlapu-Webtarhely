@@ -1,0 +1,126 @@
+.fejlec {
+	margin: -8px;
+	margin-bottom: 50px;
+	width: 100%;
+	background: black;
+	padding: 10px;
+}
+.flexcon {
+	display: flex;
+}
+.flex {
+	flex: auto;
+}
+.ftitle {
+	color: white;
+	font-size: x-large;
+	font-weight: bold;
+	text-decoration: none;
+}
+.fbutton {
+	background: white;
+	border-radius: 15px;
+	padding: 5px;
+	margin-left: 2px;
+}
+.fejlec2 {
+	margin: -8px;
+	margin-top: -50px;
+	margin-bottom: 50px;
+	background: magenta;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+
+a {
+	text-decoration: none;
+	color: black;
+}
+
+.mulupl {
+	margin-left: auto;
+	margin-right: auto;
+	width: 25%;
+	background-color: white;
+	margin-top: 32px;
+	padding: 16px;
+	border: 3px dotted black;
+}
+
+.bigbutton {
+	margin-left: 25%;
+	margin-right: 25%;
+	margin-bottom: 10px;
+	padding: 24px;
+	font-size: large;
+}
+
+.tal {
+	text-align: left;
+}
+.tac {
+	text-align: center;
+}
+.tar {
+	text-align: right;
+}
+
+.fajllista {
+	background-color: white;
+	margin-left: auto;
+	margin-right: auto;
+	border-collapse: collapse;
+}
+.fajllista thead {
+	background-color: magenta;
+}
+.fajllista tr {
+	border: 1px solid black;
+}
+
+body {
+	background-color: #cccccc;
+}
+.form-container {
+	background-color: #ffffffb0;
+	padding: 30px;
+	padding-top: 8px;
+	border-radius: 10px;
+	height: 100%;
+	box-shadow: 0 20px 20px rgba(0, 0, 0, 0.1);
+	max-width: 400px;
+	width: 100%;
+	margin: auto;
+}
+.form-group {
+	margin-bottom: 20px;
+}
+.form-group label {
+	color: rgba(0, 0, 0, 0.736);
+	display: block;
+	margin-bottom: 5px;
+	font-weight: bold;
+	font-size: 14px;
+}
+.form-group input {
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #cccccc;
+	border-radius: 5px;
+	box-sizing: border-box;
+}
+.form-group input[type='submit'] {
+	background-color: #ff6347;
+	color: rgb(0, 0, 0);
+	cursor: pointer;
+	border: none;
+	font-weight: bold;
+	font-size: 15px;
+	width: fit-content;
+	margin: auto;
+	display: block;
+}
+.form-group input[type='submit']:hover {
+	background-color: #820002;
+	color: #cccccc;
+}
