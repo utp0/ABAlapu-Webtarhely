@@ -57,32 +57,29 @@ app.post('/login', function(req, res) {
 	let nev    = req.body.nev;
 	let jelszo = req.body.jelszo;
 	//TODO: validate
-	db.query('SELECT * FROM felhasznalok WHERE nev = ?', [nev], function (error, results, fields) {
-		if(error) throw error;
-		if(results.length < 1) {
-			req.session.status = msg['login-fail'];
-			return res.redirect('/login');
-		}
-		let result = results[0];
+	
+	let result = db.execute('SELECT * FROM felhasznalok WHERE nev = :nev', [nev]);
+	if(result.length < 1){
+		req.session.status = msg['login-fail'];
+		return res.redirect('/login');
+	}
+	let user = result[0];
 
-		bcrypt.compare(jelszo, result.jelszo, function(error, result){
-			if(!error && result){
-				req.session.nev         = result.nev;
-				req.session.email       = result.email;
-				req.session.jogusultsag = result.jogusultsag;
-				req.session.belepes     = result.belepes;
-				req.session.regisztracio= result.regisztracio;
+	let pwdmatch = bcrypt.compareSync(jelszo, user.jelszo);
+	if(!pwdmatch){
+		req.session.status = msg['login-fail'];
+		return res.redirect('/login');
+	}
 
-				db.query('UPDATE felhasznalok SET belepes = CURRENT_TIMESTAMP WHERE nev = ?', [nev], function (error, results, fields) {
-					if(error) throw error;
-				});
-				return res.redirect('/');
-			} else {
-				req.session.status = msg['login-fail'];
-				return res.redirect('/login');
-			}
-		});
-	});
+	req.session.nev          = user.nev;
+	req.session.email        = user.email;
+	req.session.jogusultsag  = user.jogusultsag;
+	req.session.belepes      = user.belepes;
+	req.session.regisztracio = user.regisztracio;
+
+	db.execute('UPDATE felhasznalok SET belepes = CURRENT_TIMESTAMP WHERE nev = :nev', [nev]);
+
+	return res.redirect('/');
 });
 
 app.get('/logout', function(req, res) {
@@ -112,21 +109,17 @@ app.post('/register', function(req, res) {
 		return res.redirect('/register');
 	}
 
-	db.query('SELECT nev FROM felhasznalok WHERE nev = ?', [nev], function (error, results, fields) {
-		if(error) throw error;
-		if(results.length >= 1){
-			req.session.status = msg['reg-userex'];
-			return res.redirect('/register');
-		}
-		bcrypt.hash(jelszo1, 10, function(error, hash) {
-			if(error) throw error;
-			db.query('INSERT INTO felhasznalok (nev, email, jogusultsag, jelszo, belepes, regisztracio) VALUES (?, ?, ?, ?, NULL, current_timestamp())', [nev, email, 1, hash], function (error, results, fields) {
-				if(error) throw error;
-			});
-		});
-		req.session.status = msg['reg-ok'];
-		return res.redirect('/login')
-	});
+	let result = db.execute('SELECT nev FROM felhasznalok WHERE nev = :nev', [nev]);
+	if(result.length >= 1){
+		req.session.status = msg['reg-userex'];
+		return res.redirect('/register');
+	}
+
+	let hash = bcrypt.hashSync(jelszo1, 10);
+	db.execute('INSERT INTO felhasznalok (nev, email, jogusultsag, jelszo, belepes, regisztracio) VALUES (:nev, :email, :jogusultsag, :jelszo, NULL, current_timestamp())', [nev, email, 1, hash]);
+
+	req.session.status = msg['reg-ok'];
+	return res.redirect('/login')
 });
 
 app.get('/', function(req, res) {
@@ -135,11 +128,6 @@ app.get('/', function(req, res) {
 	return res.render('index', {
 		status:  status,
 		session: req.session
-		// nev:         req.session.nev,
-		// email:       req.session.email,
-		// jogusultsag: req.session.jogusultsag,
-		// belepes:     req.session.belepes,
-		// regisztracio:req.session.regisztracio
 	});
 });
 
