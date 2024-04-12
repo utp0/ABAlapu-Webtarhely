@@ -23,7 +23,7 @@ app.use(session({
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 app.use(express.static('public'));
-//app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 
 function isAdmin(req) { return req.session.jogusultsag >= 2; }
 function isUser(req)  { return req.session.jogusultsag >= 1; }
