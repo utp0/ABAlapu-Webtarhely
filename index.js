@@ -98,10 +98,10 @@ app.get('/register', function(req, res) {
 	});
 });
 app.post('/register', function(req, res) {
-	nev         = req.body.nev;
-	email       = req.body.email;
-	jelszo1     = req.body.jelszo1;
-	jelszo2     = req.body.jelszo2;
+	let nev = req.body.nev;
+	let email = req.body.email;
+	let jelszo1 = req.body.jelszo1;
+	let jelszo2 = req.body.jelszo2;
 	//TODO: validate
 
 	if(jelszo1 !== jelszo2){
