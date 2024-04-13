@@ -8,7 +8,7 @@ const msg = {
 }
 
 var bcrypt = require('bcryptjs');
-const {db} = require('./dbconfig.js');
+const db = require('./dao/dao');
 
 const express = require('express');
 const app = express();
@@ -97,26 +97,26 @@ app.get('/register', function(req, res) {
 		session: req.session
 	});
 });
-app.post('/register', function(req, res) {
+app.post('/register', async function (req, res) {
 	let nev = req.body.nev;
 	let email = req.body.email;
 	let jelszo1 = req.body.jelszo1;
 	let jelszo2 = req.body.jelszo2;
 	//TODO: validate
 
-	if(jelszo1 !== jelszo2){
+	if (jelszo1 !== jelszo2) {
 		req.session.status = msg['reg-pwdmm'];
 		return res.redirect('/register');
 	}
 
-	let result = db.execute('SELECT nev FROM felhasznalok WHERE nev = :nev', [nev]);
-	if(result.length >= 1){
+	let result = await db.execute('SELECT nev FROM felhasznalok WHERE nev = :nev', [nev]);
+	if (result.rows.length >= 1) {
 		req.session.status = msg['reg-userex'];
 		return res.redirect('/register');
 	}
 
 	let hash = bcrypt.hashSync(jelszo1, 10);
-	db.execute('INSERT INTO felhasznalok (nev, email, jogusultsag, jelszo, belepes, regisztracio) VALUES (:nev, :email, :jogusultsag, :jelszo, NULL, current_timestamp())', [nev, email, 1, hash]);
+	await db.execute('INSERT INTO felhasznalok (nev, email, jogosultsag, jelszo, belepes, regisztracio) VALUES (:nev, :email, :jogosultsag, :jelszo, NULL, :regisztracio)', [nev, email, 1, hash, new Date()]);
 
 	req.session.status = msg['reg-ok'];
 	return res.redirect('/login')

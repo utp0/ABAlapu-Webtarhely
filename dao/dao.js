@@ -6,14 +6,17 @@ async function execute(sql, bindings) {
     try {
         db = await oracledb.getConnection(config);
         result = await db.execute(sql, bindings);
+        await db.commit()
 
         db.close()
         return result
     } catch (e) {
-        // TODO
+        console.error(e)
     } finally {
-        if (typeof db.isConnected === 'function' && db.isConnected()) {
-            db.close();
+        try {
+            await db.close();
+        } catch (e) {
+            console.log("db már zárva volt");
         }
     }
 }
