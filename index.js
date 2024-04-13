@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 
 const session = require('express-session');
+const FileStore = require('session-file-store')(session);
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -14,10 +15,14 @@ app.use(session({
 	saveUninitialized: true,
 	cookie: {
 		maxAge: 3600000
-	}
+	},
+	store: new FileStore({
+		ttl: 3600
+	})
 }));
 
 app.use(require("./routes/login-register"));
+app.use(require("./routes/other"));
 
 // TODO: MF4 remove /d
 app.get('/d', (req, res) => {

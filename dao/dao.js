@@ -5,9 +5,7 @@ async function execute(sql, bindings) {
     let db = null, retval = new Error("Nem történt semmi.");
     try {
         db = await oracledb.getConnection(config);
-        let result = await db.execute(sql, bindings, {
-            outFormat: oracledb.OUT_FORMAT_OBJECT
-        });
+        let result = await db.execute(sql, bindings, {outFormat: oracledb.OUT_FORMAT_OBJECT});
         await db.commit()
 
         db.close()
