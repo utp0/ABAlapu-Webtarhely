@@ -17,7 +17,7 @@ app.use(session({
 		maxAge: 3600000
 	},
 	store: new FileStore({
-		ttl: 3600
+		ttl: 3600,
 	})
 }));
 
@@ -37,6 +37,10 @@ app.get('/', function(req, res) {
 		session: req.session
 	});
 });
+
+app.all((req, res) => {
+	req.session.save()
+})
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, function () {
