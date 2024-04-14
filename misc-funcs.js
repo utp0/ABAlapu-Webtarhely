@@ -5,6 +5,9 @@ const msg = {
     'reg-pwdmm':  'A két jelszó nem azonos!',
     'reg-userex': 'Ilyen nevű felhasználó már létezik!',
     'reg-ok':     'Sikeres regisztráció!',
+    'db-err':     'Adatbázis hiba!',
+    'no-filesel': 'Nincs fájl kiválasztva!',
+    'upl-error':  'Hiba történt feltöltés közben!',
 }
 
 function isAdmin(req) {
