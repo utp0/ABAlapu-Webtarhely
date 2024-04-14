@@ -4,7 +4,7 @@
 	</div>
 <% if(session.nev) { %>
 	<div class='flex'>
-		Üdvözlünk, <%= session.nev %>!
+		<span class="ftext">Üdvözlünk, <%= session.nev %>!</span>
 	</div>
 	<div class='fbutton'>
 		<a href='TODO'>Fiók beállítások</a>
@@ -28,8 +28,8 @@
 	</div>
 </div>
 <% } %>
-<% if(typeof status !== 'undefined') { %>
+<% if(session.status) { %>
 <div class='adminbar yellow'>
-	<%= status %>
+	<%= session.status %>
 </div>
 <% } %>

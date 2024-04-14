@@ -29,6 +29,7 @@ app.get('/d', (req, res) => {
     return res.json(req.session)
 })
 
+// TODO: fejlécen/főoldalon jelezni, ha adatb nem elérhető
 app.get('/', function(req, res) {
 	status = req.session.status;
 	req.session.status = undefined;
@@ -38,7 +39,7 @@ app.get('/', function(req, res) {
 	});
 });
 
-app.all((req, res) => {
+app.all((req, _) => {
 	req.session.save()
 })
 
