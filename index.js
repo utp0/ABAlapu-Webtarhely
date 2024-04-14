@@ -11,7 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(session({
 	secret: 'bSs9AtYngrZtZeWKbKxlm6bEE8wviB0Zm4B+l+BNd9Q=',
-	resave: false,
+	resave: true,
 	saveUninitialized: false,
 	cookie: {
 		maxAge: 3600000
