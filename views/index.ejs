@@ -11,5 +11,12 @@
 		<div class='bigbutton' style='background-color: #FF8F8F;'><a href='fajllista'>Saját fájlaim</a></div>
 		<div class='bigbutton' style='background-color: #FFDE6B;'>Csoportok kezelése</div>
 		<div class='bigbutton' style='background-color: #CCFF5F;'>Díjcsomagok</div>
+		
+		<h3>Felhasználók listája (adatb kapcsolat ellenőrzéséhez):</h3>
+		<ul>
+			<% for(const user of users) { %>
+				<li><%= user["NEV"] %></li>
+			<% } %>
+		</ul>
 	</body>
 </html>

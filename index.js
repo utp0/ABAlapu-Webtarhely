@@ -1,4 +1,5 @@
 const express = require('express');
+const db = require("./dao/dao")
 const app = express();
 
 const session = require('express-session');
@@ -29,13 +30,16 @@ app.get('/d', (req, res) => {
     return res.json(req.session)
 })
 
-// TODO: fejlécen/főoldalon jelezni, ha adatb nem elérhető
-app.get('/', function(req, res) {
+app.get('/', async function(req, res) {
 	status = req.session.status;
 	req.session.status = undefined;
+
+	let result = await db.execute('SELECT NEV FROM FELHASZNALOK', []);
+
 	return res.render('index', {
 		status:  status,
-		session: req.session
+		session: req.session,
+		users:   result.rows
 	});
 });
 
