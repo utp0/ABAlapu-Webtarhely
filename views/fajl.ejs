@@ -8,10 +8,10 @@
 	<body>
 		<%- include('_fejlec.ejs') %>
 
-		<h1>/ez egy mappa/fajl #4.c</h1>
+		<h1><%= file["PATH"] + file["NEV"] %></h1>
 		<hr>
 
-		Méret: 10.7 KiB<br>
+		Méret: <%= file["MERET"] %><br>
 		Módosítva: 2024-03-06 19:00:56<br>
 		Megosztva:<br>
 
@@ -26,8 +26,13 @@
 
 		<div>
 			<h3>Hozzászólások:</h3>
-			<input type='text'/>
-			<input type='button' value='Küldés'/>
+			<% for(const comment of comments) { %>
+			<b><%= comment["NEV_FELHASZNALO"] %></b>: <%= comment["SZOVEG"] %><br>
+			<% } %>
+			<form action="/ujkomment?q=<%= fajlid %>" method="POST" enctype="application/x-www-form-urlencoded">
+				<input type='text' name='szoveg' />
+				<input type='submit' value='Küldés' />
+			</form>
 		</div>
 	</body>
 </html>

@@ -2,6 +2,9 @@ const oracledb = require('oracledb');
 const {config} = require("../dbconfig");
 
 async function execute(sql, bindings) {
+    console.log(sql);
+    console.log(bindings);
+    console.log();
     let db = null, retval = new Error("Nem történt semmi.");
     try {
         db = await oracledb.getConnection(config);
@@ -17,7 +20,7 @@ async function execute(sql, bindings) {
         try {
             if (db != null) await db.close();
         } catch (e) {
-            console.log("db már zárva volt");
+            //console.log("db már zárva volt");
         }
         if (retval instanceof Error) throw retval;
         return retval;

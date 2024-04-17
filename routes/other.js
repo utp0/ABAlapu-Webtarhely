@@ -4,6 +4,33 @@ const db = require("../dao/dao")
 
 const router = express.Router();
 
+router.get('/fajl', async function(req, res) {
+	let file = await db.execute("SELECT * FROM FAJLOK WHERE fajlok.id = :id", [req.query.id]);
+	//let user = await db.execute("SELECT nev_felhasznalo FROM FELTOLTOTTE WHERE id_fajl = :id", [req.query.id]);
+	let comments = await db.execute("SELECT kommentek.*, irta.nev_felhasznalo FROM kommentek, fajlhoz, irta WHERE fajlhoz.id_fajl = :id AND fajlhoz.id_komment = kommentek.id AND kommentek.id = irta.id_komment", [req.query.id])
+
+	status = req.session.status;
+	req.session.status = undefined;
+	return res.render('fajl', {
+		status:  status,
+		session: req.session,
+		file:    file.rows[0],
+		//user:    user.rows[0],
+		comments:comments.rows,
+		fajlid:  req.query.id
+	})
+})
+
+router.post("/ujkomment", requireUser, async function(req, res) {
+	let result = await db.execute("INSERT INTO KOMMENTEK (SZOVEG) VALUES (:szoveg)", [req.body.szoveg]);
+        let result2= await db.execute("SELECT ID FROM KOMMENTEK WHERE ROWID = :id", [result.lastRowid]);
+	let kommid = result2.rows[0]["ID"];
+	await db.execute("INSERT INTO FAJLHOZ (ID_FAJL, ID_KOMMENT) VALUES (:idfajl, :idkomm)", [req.query.q, kommid]);
+	await db.execute("INSERT INTO IRTA (NEV_FELHASZNALO, ID_KOMMENT) VALUES (:username, :idkomm)", [req.session.nev, kommid]);
+
+        return res.redirect("/fajl?id=" + req.query.q);
+})
+
 router.get('/fajllista', requireUser, async (req, res) => {
     try {
         let fajlok =
