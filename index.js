@@ -1,50 +1,32 @@
+process.env.TZ = 'Europe/Budapest';
+
 const express = require('express');
-const db = require("./dao/dao")
 const app = express();
-
-const session = require('express-session');
-const FileStore = require('session-file-store')(session);
-
+const express_session = require('express-session');
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
-
-app.use(session({
+app.use(express_session({
 	secret: 'bSs9AtYngrZtZeWKbKxlm6bEE8wviB0Zm4B+l+BNd9Q=',
 	resave: true,
-	saveUninitialized: false,
-	cookie: {
-		maxAge: 3600000
-	},
-	store: new FileStore({
-		ttl: 3600,
-	}),
+	saveUninitialized: true
 }));
 
-app.use(require("./routes/login-register"));
-app.use(require("./routes/other"));
+global.pop = (reqsession) => {
+    const msg = reqsession.status;
+    reqsession.status = null;
+    return msg;
+}
 
-// TODO: MF4 remove /d
-app.get('/d', (req, res) => {
+app.use(require('./routes/index.js'));
+app.use(require('./routes/login.js'));
+app.use(require('./routes/logout.js'));
+app.use(require('./routes/register.js'));
+
+// TODO: MF4 remove
+app.get('/json', (req, res) => {
     return res.json(req.session)
-})
-
-app.get('/', async function(req, res) {
-	status = req.session.status;
-	req.session.status = undefined;
-
-	let result = await db.execute('SELECT NEV FROM FELHASZNALOK', []);
-
-	return res.render('index', {
-		status:  status,
-		session: req.session,
-		users:   result.rows
-	});
-});
-
-app.all((req, _) => {
-	req.session.save()
 })
 
 const PORT = process.env.PORT || 8080;

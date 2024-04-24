@@ -1,32 +1,34 @@
-const oracledb = require('oracledb');
-const {config} = require("../dbconfig");
+const bcrypt = require('bcryptjs');
 
-async function execute(sql, bindings) {
-    console.log(sql);
-    console.log(bindings);
-    console.log();
-    let db = null, retval = new Error("Nem történt semmi.");
-    try {
-        db = await oracledb.getConnection(config);
-        let result = await db.execute(sql, bindings, {outFormat: oracledb.OUT_FORMAT_OBJECT});
-        await db.commit()
+const db = require('./dbconn.js');
 
-        db.close()
-        retval = result
-    } catch (e) {
-        console.error(e)
-        retval = e
-    } finally {
-        try {
-            if (db != null) await db.close();
-        } catch (e) {
-            //console.log("db már zárva volt");
-        }
-        if (retval instanceof Error) throw retval;
-        return retval;
-    }
+async function listUsers() {
+    return await db('SELECT nev FROM felhasznalok', []);
+}
+
+async function objUserByName(nev) {
+    let users = await db('SELECT * FROM felhasznalok WHERE nev = :nev', [nev]);
+    if(users.length < 1) return;
+    return users[0];
+}
+
+async function objLogin(nev, jelszo) {
+    let user = await objUserByName(nev);
+    if(!user) return;
+    if(!bcrypt.compareSync(jelszo, user.JELSZO)) return;
+
+    await db('UPDATE felhasznalok SET belepes = :datum WHERE nev = :nev', [new Date(), nev]);
+
+    return user;
+}
+
+async function boolRegister(nev, email, jogusultsag, jelszo) {
+    if(await objUserByName(nev)) return false;
+    let pwdhash = bcrypt.hashSync(jelszo, 10);
+    await db('INSERT INTO felhasznalok (nev, email, jogosultsag, jelszo, belepes, regisztracio) VALUES (:nev, :email, :jogosultsag, :jelszo, :belepes, :regisztracio)', [nev, email, jogusultsag, pwdhash, null, new Date()]);
+    return true;
 }
 
 module.exports = {
-    execute
-}
+    listUsers, objUserByName, objLogin, boolRegister
+};
