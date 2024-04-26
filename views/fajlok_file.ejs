@@ -8,11 +8,11 @@
 	<body>
 		<%- include('_fejlec.ejs') %>
 
-		<h1><%= file["PATH"] + file["NEV"] %></h1>
+		<h1><%= file.UTVONAL %></h1>
 		<hr>
 
-		Méret: <%= file["MERET"] %><br>
-		Módosítva: 2024-03-06 19:00:56<br>
+		Méret: <%= file.MERET %><br>
+		Módosítva: 0000-00-00 00:00:00<br>
 		Megosztva:<br>
 
 		<div class='flexcon' style='margin-top: 24px;'>
@@ -27,7 +27,7 @@
 		<div>
 			<h3>Hozzászólások:</h3>
 			<% for(const comment of comments) { %>
-			<b><%= comment["NEV_FELHASZNALO"] %></b>: <%= comment["SZOVEG"] %><br>
+			<b><%= comment.IRTA %></b>: <%= comment.SZOVEG %><br>
 			<% } %>
 			<form action="/ujkomment?q=<%= fajlid %>" method="POST" enctype="application/x-www-form-urlencoded">
 				<input type='text' name='szoveg' />

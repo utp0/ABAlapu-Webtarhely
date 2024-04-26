@@ -23,6 +23,8 @@ app.use(require('./routes/index.js'));
 app.use(require('./routes/login.js'));
 app.use(require('./routes/logout.js'));
 app.use(require('./routes/register.js'));
+app.use(require('./routes/fajlok.js'));
+app.use(require('./routes/fajldl'));
 
 // TODO: MF4 remove
 app.get('/json', (req, res) => {

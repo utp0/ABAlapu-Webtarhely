@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang='hu'>
+	<head>
+		<meta charset='UTF-8'>
+		<title>Webtárhely - Saját fájlaim</title>
+		<link rel='stylesheet' href='/css/style.css'>
+	</head>
+	<body>
+		<%- include('_fejlec.ejs') %>
+
+		<h1>
+			Útvonal: <%= path %>
+		</h1>
+		<table class='fajllista'>
+			<thead>
+				<td style='width: 1%;'></td>
+				<td style='width: 1%;'></td>
+				<td style='width: 35%;'>Fájlnév</td>
+				<td style='width: 6%;'>Méret</td>
+				<td style='width: 15%;'>Módosítva</td>
+				<td style='width: 5%;'>Megosztva</td>
+				<td style='width: 3%;'></td>
+				<td style='width: 3%;'></td>
+			</thead>
+			<tbody>
+				<% for(const file of files) { %>
+				<% let filename = file.UTVONAL %>
+				<% filename = filename.substr(filename.lastIndexOf('/')) %>
+				<tr>
+					<td><input type='checkbox' /></td>
+					<td></td>
+					<td><a href='fajl.html'><%= filename %></a></td>
+					<td><%= file.MERET %> B</td>
+					<td>0000-00-00 00:00:00</td>
+					<td></td>
+					<td>⚙</td>
+					<td style='color: red;'>x</td>
+				</tr>
+				<% } %>
+			</tbody>
+		</table>
+		<br>
+		<div class='mulupl'>
+			<form method='post' enctype='multipart/form-data'>
+				Fájlok feltöltése ide:<br>
+				<input type='file' id='file' name='file' multiple />
+				<button>Submit</button>
+			</form>
+		</div>
+	</body>
+</html>

@@ -1,13 +1,15 @@
 const oracledb = require('oracledb');
 oracledb.autoCommit = true;
 
-const host = process.env.ORACLEDBHOST || 'orania2.inf.u-szeged.hu';
+const host = process.env.DBHOST || 'orania2.inf.u-szeged.hu';
 const cstr = '(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST='+host+')(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SID=orania2)))';
 const config = {
-    user: process.env.ORACLEDBUSER || '',
-    password: process.env.ORACLEDBPASSWORD || '',
-    connectString: process.env.ORACLEDBCONNECTSTRING || cstr
+    user: process.env.DBUSER || '',
+    password: process.env.DBPWD || '',
+    connectString: process.env.DBCSTR || cstr
 };
+
+const fakemode = process.env.FAKEDB;
 
 async function execute(sql, bindings) {
     console.log(sql);
@@ -22,5 +24,10 @@ async function execute(sql, bindings) {
 
     return result.rows;
 }
+async function fakeexec(sql, bindings) {
+    console.log(sql);
+    console.log(bindings);
+    return [];
+}
 
-module.exports = execute;
+module.exports = fakemode ? fakeexec : execute;
