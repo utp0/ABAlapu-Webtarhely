@@ -14,17 +14,21 @@ app.use(express_session({
 }));
 
 global.pop = (reqsession) => {
-    const msg = reqsession.status;
+    const status = reqsession.status;
     reqsession.status = null;
-    return msg;
-}
+    return {
+	status: status,
+	session: reqsession
+    }
+};
 
 app.use(require('./routes/index.js'));
 app.use(require('./routes/login.js'));
 app.use(require('./routes/logout.js'));
 app.use(require('./routes/register.js'));
 app.use(require('./routes/fajlok.js'));
-app.use(require('./routes/fajldl'));
+//app.use(require('./routes/fajl.js'));
+app.use(require('./routes/szolgaltatas.js'));
 
 // TODO: MF4 remove
 app.get('/json', (req, res) => {

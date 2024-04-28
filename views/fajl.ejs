@@ -8,7 +8,7 @@
 	<body>
 		<%- include('_fejlec.ejs') %>
 
-		<h1><%= file.UTVONAL %></h1>
+		<h1><%= `${file.UTVONAL}/${file.FAJLNEV}` %></h1>
 		<hr>
 
 		Méret: <%= file.MERET %><br>

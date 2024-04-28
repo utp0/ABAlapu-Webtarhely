@@ -4,11 +4,9 @@ const router = express.Router();
 const dao = require('../dao/dao.js');
 
 router.get('/login', (req, res) => {
-    res.render('login', {
-	status:  pop(req.session),
-	session: req.session
-    });
+    res.render('login', pop(req.session)); 
 });
+
 router.post('/login', async (req, res) => {
     let user = await dao.objLogin(req.body.nev, req.body.jelszo);
 
@@ -18,11 +16,8 @@ router.post('/login', async (req, res) => {
 	return;
     }
 
-    req.session.nev          = user.NEV;
-    req.session.email        = user.EMAIL;
-    req.session.jogosultsag  = user.JOGOSULTSAG;
-    req.session.belepes      = user.BELEPES;
-    req.session.regisztracio = user.REGISZTRACIO;
+    Object.keys(user).forEach(prop => {req.session[prop.toLowerCase()] = user[prop]});
+    req.session.kapacitas = (await dao.objSzolgaltatasByName(req.session.elofizetes)).MERET;
 
     res.redirect('/');
 });

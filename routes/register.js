@@ -2,13 +2,9 @@ const express = require('express');
 const router = express.Router();
 
 const dao = require('../dao/dao.js');
-const storage = require('../misc/storage.js');
 
 router.get('/register', (req, res) => {
-    res.render('register', {
-	status:  pop(req.session),
-        session: req.session
-    });
+    res.render('register', pop(req.session));
 });
 router.post('/register', async (req, res) => {
     if (req.body.jelszo1 !== req.body.jelszo2) {
@@ -24,8 +20,7 @@ router.post('/register', async (req, res) => {
 	return;
     }
 
-    await dao.boolNewFile(req.body.nev, -1, 1);
-    storage.mkdir(req.body.nev);
+    await dao.idNewFile('', req.body.nev, -1, 1);
 
     req.session.status = 'Sikeres regisztráció!';
     res.redirect('/login')

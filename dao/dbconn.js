@@ -19,7 +19,12 @@ async function execute(sql, bindings) {
     const result = await dbconn.execute(sql, bindings, {outFormat: oracledb.OUT_FORMAT_OBJECT});
     await dbconn.close();
 
-    console.log(result.rows && result.rows.length);
+    //console.log(result.rows && result.rows.length);
+    if(result.rows) {
+	for(const [i, row] of result.rows.entries()) {
+	    console.log(i, row);
+	}
+    }
     console.log();
 
     return result.rows;

@@ -9,8 +9,13 @@
 		<%- include('_fejlec.ejs') %>
 
 		<h1>
-			Útvonal: <%= path %>
+			Útvonal: <%= cdir.fullpath %>
 		</h1>
+		<form action='/fajlml/<%= cdir.fullpath %>' method='post' enctype='application/x-www-form-urlencoded'>
+			Új mappa létrehozása:<br>
+			<input type='text' name='mappanev' />
+			<button>Létrehoz</button>
+		</form>
 		<table class='fajllista'>
 			<thead>
 				<td style='width: 1%;'></td>
@@ -24,12 +29,10 @@
 			</thead>
 			<tbody>
 				<% for(const file of files) { %>
-				<% let filename = file.UTVONAL %>
-				<% filename = filename.substr(filename.lastIndexOf('/')) %>
 				<tr>
 					<td><input type='checkbox' /></td>
-					<td></td>
-					<td><a href='fajl.html'><%= filename %></a></td>
+					<td><img src='<%= file.MAPPA ? "/img/folder.png" : "/img/file.png" %>'></td>
+					<td><a href='<%= `${cdir.name}/${file.FAJLNEV}` %>'><%= file.FAJLNEV %></a></td>
 					<td><%= file.MERET %> B</td>
 					<td>0000-00-00 00:00:00</td>
 					<td></td>
@@ -41,10 +44,10 @@
 		</table>
 		<br>
 		<div class='mulupl'>
-			<form method='post' enctype='multipart/form-data'>
+			<form action='/fajlul/<%= cdir.fullpath %>' method='post' enctype='multipart/form-data'>
 				Fájlok feltöltése ide:<br>
-				<input type='file' id='file' name='file' multiple />
-				<button>Submit</button>
+				<input type='file' name='file' multiple />
+				<button>Feltöltés</button>
 			</form>
 		</div>
 	</body>

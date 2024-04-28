@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang='hu'>
+	<head>
+		<meta charset='UTF-8'>
+		<title>Webtárhely - Szolgáltatások</title>
+		<link rel='stylesheet' href='/css/style.css'>
+	</head>
+	<body>
+<%- include('_fejlec.ejs') %>
+
+		<table class='fajllista'>
+			<thead>
+				<th style='width: 10%;'>Név</th>
+				<th style='width: 35%;'>Leírás</th>
+				<th style='width: 15%;'>Ár/Hó</th>
+				<th style='width: 10%;'>Kapacitás</th>
+				<th style='width: 10%;'>Aktiválás</th>
+			</thead>
+			<tbody>
+				<form action='/szolgaltatas' method='post'>
+<% for(const e of szolgaltatasok) { %>
+	<% if(session.nev && session.elofizetes === e.NEV) { %>
+					<tr style="background: lightgreen;">
+	<% } else { %>
+					<tr>
+	<% } %>
+						<td><%= e.NEV %></td>
+						<td><%= e.LEIRAS %></td>
+						<td><%= e.AR %></td>
+						<td><%= e.MERET %></td>
+						<td><input type='submit' name='aktival' value='<%= e.NEV %>'></td>
+					</tr>
+<% } %>
+				</form>
+<% if(session.jogosultsag === 1) { //TODO %>
+				<form action='/szolgaltatasmod' method='post'>
+					<tr style='background: gray;'>
+						<td style='padding: 13px;'></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td><input type='text' name='nev'></td>
+						<td><input type='text' name='leiras'></td>
+						<td><input type='text' name='ar'></td>
+						<td><input type='text' name='meret'></td>
+						<td><input type='submit' name='submit' value='Mehet'></td>
+					</tr>
+				</form>
+<% } %>
+			</tbody>
+		</table>
+<% if(session.jogosultsag === 1) { //TODO %>
+		<h3>Adminnak módosítás:</h3>
+		<h5>Ha csak a név van kitöltve: törlés</h5>
+		<h5>Ha van más is kitöltve: létrehoz / módosít</h5>
+<% } %>
+	</body>
+</html>
